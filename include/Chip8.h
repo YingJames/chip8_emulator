@@ -44,6 +44,8 @@ public:
 
     // skip the following (or next) instruction if the VX != NN
     void execOpcode0x4XNN();
+
+    // skip the following (or next) instruction if the VX == VY
     void execOpcode0x5XY0();
     void execOpcode0x6XNN();
     void execOpcode0x7XNN();

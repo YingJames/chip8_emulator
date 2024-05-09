@@ -151,7 +151,7 @@ void Chip8::execOpcode0x5XY0() {
     const unsigned short VX = V[X];
     const unsigned short VY = V[Y];
 
-    if (VX != VY) {
+    if (VX == VY) {
         pc += 4;
     }
 
