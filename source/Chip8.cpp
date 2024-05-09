@@ -21,9 +21,9 @@ void Chip8::initialize() {
 
     // testing opcode
     memory[pc] = 0x80;
-    memory[pc + 1] = 0x15;
+    memory[pc + 1] = 0x16;
     V[0] = 0x10;
-    V[1] = 0x20;
+    V[1] = 0x23;
 
     // load fontset
     for (int i = 0; i < 80; i++) {
@@ -96,6 +96,9 @@ void Chip8::emulateCycle() {
                 break;
             case 0x8005:
                 opcode_function = &Chip8::execOpcode0x8XY5;
+                break;
+            case 0x8006:
+                opcode_function = &Chip8::execOpcode0x8XY6;
                 break;
 
             default:
@@ -243,6 +246,16 @@ void Chip8::execOpcode0x8XY5() {
     V[0xF] = ((V[X] - V[Y]) < 0x0);
     V[X] -= V[Y];
     printf("testing 0x8XY5: Diff=0x%X, Borrow=%d\n", V[X], V[0xF]);
+}
+
+void Chip8::execOpcode0x8XY6() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+
+    // store least sig digit
+    V[0xF] = V[Y] & 0x01;
+    V[X] >>= V[Y];
+    printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0xANNN() {

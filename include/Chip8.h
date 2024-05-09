@@ -68,7 +68,11 @@ public:
 
     // Add VY value to register VX with carry value set to VF
     void execOpcode0x8XY4();
+
+    // Subtract VY value to register VX with borrow value set to VF
     void execOpcode0x8XY5();
+
+    // store right shifted VY to register VX with lsbit of VY set to VF
     void execOpcode0x8XY6();
     void execOpcode0x8XY7();
     void execOpcode0x8XYE();
