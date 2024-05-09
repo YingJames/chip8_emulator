@@ -74,6 +74,8 @@ public:
 
     // store right shifted VY to register VX with lsbit of VY set to VF
     void execOpcode0x8XY6();
+
+    // store VY - VX to register VX with borrow value set to VF
     void execOpcode0x8XY7();
     void execOpcode0x8XYE();
     void execOpcode0x9XY0();

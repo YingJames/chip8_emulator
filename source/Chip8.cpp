@@ -258,6 +258,16 @@ void Chip8::execOpcode0x8XY6() {
     printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
 }
 
+void Chip8::execOpcode0x8XY7() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+
+    // eval to 1 or 0 if there is a borrow
+    V[0xF] = ((V[Y] - V[X]) < 0x0);
+    V[X] = V[Y] - V[X];
+    printf("testing 0x8XY7: VX (VY-VX)=0x%X, Borrow=%d\n", V[X], V[0xF]);
+}
+
 void Chip8::execOpcode0xANNN() {
     printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
