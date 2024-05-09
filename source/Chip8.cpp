@@ -58,6 +58,9 @@ void Chip8::emulateCycle() {
             case 0x4000:
                 opcode_function = &Chip8::execOpcode0x4XNN;
                 break;
+            case 0x5000:
+                opcode_function = &Chip8::execOpcode0x5XY0;
+                break;
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
                 break;
@@ -138,6 +141,19 @@ void Chip8::execOpcode0x4XNN() {
 
     printf("checking if  V%X != NN (%X) - Result: %d\n", X, NN, (VX != NN));
 
+}
+
+void Chip8::execOpcode0x5XY0() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const unsigned short VX = V[X];
+    const unsigned short VY = V[Y];
+
+    if (VX != VY) {
+        pc += 4;
+    }
+
+    printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (VX != VY));
 }
 
 void Chip8::execOpcode0xANNN() {
