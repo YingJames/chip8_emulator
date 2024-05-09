@@ -20,8 +20,8 @@ void Chip8::initialize() {
     std::memset(gfx, 0, sizeof(gfx));
 
     // testing opcode
-    memory[pc] = 0xA2;
-    memory[pc + 1] = 0xF0;
+    memory[pc] = 0x00;
+    memory[pc + 1] = 0xE0;
 
     // load fontset
     for (int i = 0; i < 80; i++) {
@@ -35,13 +35,21 @@ void Chip8::emulateCycle() {
 
     // decode opcode
     void (Chip8::*opcode_function) () = nullptr;
-    switch (opcode & 0xF000) {
-        case 0xA000:
-            opcode_function = &Chip8::execOpcode0xANNN;
+    switch (opcode) {
+        case 0x00E0:
+            opcode_function = &Chip8::execOpcode0x00E0;
             break;
+    }
 
-        default:
-            std::cout << "Unknown opcode: 0x" << opcode << '\n';
+    if (opcode_function != nullptr) {
+        switch (opcode & 0xF000) {
+            case 0xA000:
+                opcode_function = &Chip8::execOpcode0xANNN;
+                break;
+
+            default:
+                std::cout << "Unknown opcode: 0x" << std::hex << opcode << '\n';
+        }
     }
 
     // execute opcode
@@ -62,7 +70,17 @@ void Chip8::emulateCycle() {
     }
 }
 
+void Chip8::execOpcode0x0NNN() {
+    std::cout << "test 0x0NNN opcode\n";
+}
+
+// clear the screen
+void Chip8::execOpcode0x00E0() {
+    std::cout << "test 0x00E0 opcode\n";
+    std::memset(gfx, 0, sizeof(gfx));
+}
+
 void Chip8::execOpcode0xANNN() {
-    std::cout << "test A opcode\n";
+    std::cout << "test 0xANNN opcode\n";
     I = opcode & 0x0FFF;
 }

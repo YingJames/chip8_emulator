@@ -24,7 +24,42 @@ public:
 
     void initialize();
     void emulateCycle();
+
+    void execOpcode0x0NNN();
+    void execOpcode0x00E0();
+    void execOpcode0x00EE();
+    void execOpcode0x1NNN();
+    void execOpcode0x2NNN();
+    void execOpcode0x3XNN();
+    void execOpcode0x4XNN();
+    void execOpcode0x5XY0();
+    void execOpcode0x6XNN();
+    void execOpcode0x7XNN();
+    void execOpcode0x8XY0();
+    void execOpcode0x8XY1();
+    void execOpcode0x8XY2();
+    void execOpcode0x8XY3();
+    void execOpcode0x8XY4();
+    void execOpcode0x8XY5();
+    void execOpcode0x8XY6();
+    void execOpcode0x8XY7();
+    void execOpcode0x8XYE();
+    void execOpcode0x9XY0();
     void execOpcode0xANNN();
+    void execOpcode0xBNNN();
+    void execOpcode0xCXNN();
+    void execOpcode0xDXYN();
+    void execOpcode0xEX9E();
+    void execOpcode0xEXA1();
+    void execOpcode0xFX07();
+    void execOpcode0xFX0A();
+    void execOpcode0xFX15();
+    void execOpcode0xFX18();
+    void execOpcode0xFX1E();
+    void execOpcode0xFX29();
+    void execOpcode0xFX33();
+    void execOpcode0xFX55();
+    void execOpcode0xFX65();
 
 };
 
