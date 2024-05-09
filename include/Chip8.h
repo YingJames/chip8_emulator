@@ -65,6 +65,8 @@ public:
 
     // Set register VX to VX XOR VY
     void execOpcode0x8XY3();
+
+    // Add VY value to register VX with carry value set to VF
     void execOpcode0x8XY4();
     void execOpcode0x8XY5();
     void execOpcode0x8XY6();
