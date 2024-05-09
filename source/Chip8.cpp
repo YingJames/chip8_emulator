@@ -20,7 +20,7 @@ void Chip8::initialize() {
     std::memset(gfx, 0, sizeof(gfx));
 
     // testing opcode
-    memory[pc] = 0x00;
+    memory[pc] = 0x3f;
     memory[pc + 1] = 0xEE;
 
     // load fontset
@@ -51,6 +51,9 @@ void Chip8::emulateCycle() {
                 break;
             case 0x2000:
                 opcode_function = &Chip8::execOpcode0x2NNN;
+                break;
+            case 0x3000:
+                opcode_function = &Chip8::execOpcode0x3XNN;
                 break;
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
@@ -110,6 +113,19 @@ void Chip8::execOpcode0x2NNN() {
 
     const unsigned short address = (opcode & 0x0FFF);
     pc = address;
+}
+
+// skip the following instruction
+void Chip8::execOpcode0x3XNN() {
+    const unsigned short NN = (opcode & 0x00FF);
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short VX = V[X];
+
+    if (VX == NN) {
+        pc += 4;
+    }
+
+    printf("checking if  V%X is equal to NN (%X)\n", X, NN);
 }
 
 void Chip8::execOpcode0xANNN() {
