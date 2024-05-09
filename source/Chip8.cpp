@@ -142,14 +142,14 @@ void Chip8::execOpcode0x2NNN() {
     ++sp;
     stack[sp] = pc;
 
-    const unsigned short address = (opcode & 0x0FFF);
+    const uint16_t address = (opcode & 0x0FFF);
     pc = address;
 }
 
 void Chip8::execOpcode0x3XNN() {
-    const unsigned short NN = (opcode & 0x00FF);
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short VX = V[X];
+    const uint8_t NN = (opcode & 0x00FF);
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t VX = V[X];
 
     if (VX == NN) {
         pc += 4;
@@ -159,9 +159,9 @@ void Chip8::execOpcode0x3XNN() {
 }
 
 void Chip8::execOpcode0x4XNN() {
-    const unsigned short NN = (opcode & 0x00FF);
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short VX = V[X];
+    const uint8_t NN = (opcode & 0x00FF);
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t VX = V[X];
 
     if (VX != NN) {
         pc += 4;
@@ -172,10 +172,10 @@ void Chip8::execOpcode0x4XNN() {
 }
 
 void Chip8::execOpcode0x5XY0() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
-    const unsigned short VX = V[X];
-    const unsigned short VY = V[Y];
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+    const uint8_t VX = V[X];
+    const uint8_t VY = V[Y];
 
     if (VX == VY) {
         pc += 4;
@@ -185,44 +185,44 @@ void Chip8::execOpcode0x5XY0() {
 }
 
 void Chip8::execOpcode0x6XNN() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short NN = (opcode & 0x00FF);
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t NN = (opcode & 0x00FF);
     V[X] = NN;
 }
 
 void Chip8::execOpcode0x7XNN() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short NN = (opcode & 0x00FF);
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t NN = (opcode & 0x00FF);
     V[X] += NN;
 }
 
 void Chip8::execOpcode0x8XY0() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[Y];
 }
 
 void Chip8::execOpcode0x8XY1() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] | V[Y];
 }
 
 void Chip8::execOpcode0x8XY2() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] & V[Y];
 }
 
 void Chip8::execOpcode0x8XY3() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] ^ V[Y];
 }
 
 void Chip8::execOpcode0x8XY4() {
-    const unsigned short X = (opcode & 0x0F00) >> 8;
-    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
 
     // eval to 1 or 0 if there is a carry
     V[0xF] = ((V[X] + V[Y]) > 0xFF);
