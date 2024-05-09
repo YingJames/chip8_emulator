@@ -20,8 +20,8 @@ void Chip8::initialize() {
     std::memset(gfx, 0, sizeof(gfx));
 
     // testing opcode
-    memory[pc] = 0x10;
-    memory[pc + 1] = 0xE0;
+    memory[pc] = 0x00;
+    memory[pc + 1] = 0xEE;
 
     // load fontset
     for (int i = 0; i < 80; i++) {
@@ -38,6 +38,9 @@ void Chip8::emulateCycle() {
     switch (opcode) {
         case 0x00E0:
             opcode_function = &Chip8::execOpcode0x00E0;
+            break;
+        case 0x00EE:
+            opcode_function = &Chip8::execOpcode0x00EE;
             break;
     }
 
@@ -56,6 +59,7 @@ void Chip8::emulateCycle() {
     }
 
     // execute opcode
+//    pc += 2;
     if (opcode_function != nullptr) {
         (this->*opcode_function) ();
     }
@@ -81,6 +85,13 @@ void Chip8::execOpcode0x0NNN() {
 void Chip8::execOpcode0x00E0() {
     printf("test 0x00E0 opcode\n");
     std::memset(gfx, 0, sizeof(gfx));
+}
+
+// return from subroutine
+void Chip8::execOpcode0x00EE() {
+    printf("test 0x00EE opcode\n");
+    pc = stack[sp];
+    --sp;
 }
 
 void Chip8::execOpcode0x1NNN() {
