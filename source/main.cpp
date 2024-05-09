@@ -1,5 +1,5 @@
 #include <iostream>
-#include "include/Chip8.h"
+#include "Chip8.h"
 
 Chip8 Chip8;
 

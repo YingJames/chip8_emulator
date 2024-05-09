@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <cstring>
-#include "include/Chip8.h"
-#include "include/fontset.h"
+#include "Chip8.h"
+#include "fontset.h"
 
 void Chip8::initialize() {
     // initialize registers and memory once
