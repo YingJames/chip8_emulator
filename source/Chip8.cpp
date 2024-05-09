@@ -49,6 +49,9 @@ void Chip8::emulateCycle() {
             case 0x1000:
                 opcode_function = &Chip8::execOpcode0x1NNN;
                 break;
+            case 0x2000:
+                opcode_function = &Chip8::execOpcode0x2NNN;
+                break;
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
                 break;
@@ -98,6 +101,15 @@ void Chip8::execOpcode0x1NNN() {
     pc = (opcode & 0x0FFF);
     printf("test 0x1NNN opcode\n");
     printf("jumping to address 0x%03x\n", pc);
+}
+
+// call a subroutine
+void Chip8::execOpcode0x2NNN() {
+    ++sp;
+    stack[sp] = pc;
+
+    const unsigned short address = (opcode & 0x0FFF);
+    pc = address;
 }
 
 void Chip8::execOpcode0xANNN() {
