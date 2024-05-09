@@ -20,7 +20,7 @@ void Chip8::initialize() {
     std::memset(gfx, 0, sizeof(gfx));
 
     // testing opcode
-    memory[pc] = 0x00;
+    memory[pc] = 0x10;
     memory[pc + 1] = 0xE0;
 
     // load fontset
@@ -41,8 +41,11 @@ void Chip8::emulateCycle() {
             break;
     }
 
-    if (opcode_function != nullptr) {
+    if (opcode_function == nullptr) {
         switch (opcode & 0xF000) {
+            case 0x1000:
+                opcode_function = &Chip8::execOpcode0x1NNN;
+                break;
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
                 break;
@@ -71,16 +74,22 @@ void Chip8::emulateCycle() {
 }
 
 void Chip8::execOpcode0x0NNN() {
-    std::cout << "test 0x0NNN opcode\n";
+    printf("test 0x0NNN opcode\n");
 }
 
 // clear the screen
 void Chip8::execOpcode0x00E0() {
-    std::cout << "test 0x00E0 opcode\n";
+    printf("test 0x00E0 opcode\n");
     std::memset(gfx, 0, sizeof(gfx));
 }
 
+void Chip8::execOpcode0x1NNN() {
+    pc = (opcode & 0x0FFF);
+    printf("test 0x1NNN opcode\n");
+    printf("jumping to address 0x%03x\n", pc);
+}
+
 void Chip8::execOpcode0xANNN() {
-    std::cout << "test 0xANNN opcode\n";
+    printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
 }
