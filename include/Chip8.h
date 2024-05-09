@@ -24,6 +24,7 @@ public:
 
     void initialize();
     void emulateCycle();
+    void execOpcode0xANNN();
 
 };
 
