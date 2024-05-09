@@ -217,6 +217,15 @@ void Chip8::execOpcode0x8XY3() {
     V[X] = V[X] ^ V[Y];
 }
 
+void Chip8::execOpcode0x8XY4() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+
+    // eval to 1 or 0 if there is a carry
+    V[0xF] = ((V[X] + V[Y]) > 0xFF);
+    V[X] += V[Y];
+}
+
 void Chip8::execOpcode0xANNN() {
     printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
