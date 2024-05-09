@@ -20,8 +20,10 @@ void Chip8::initialize() {
     std::memset(gfx, 0, sizeof(gfx));
 
     // testing opcode
-    memory[pc] = 0x4f;
-    memory[pc + 1] = 0xEE;
+    memory[pc] = 0x80;
+    memory[pc + 1] = 0x15;
+    V[0] = 0x10;
+    V[1] = 0x20;
 
     // load fontset
     for (int i = 0; i < 80; i++) {
@@ -71,14 +73,11 @@ void Chip8::emulateCycle() {
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
                 break;
-
-            default:
-                printf("Unknown opcode: 0x%X\n", opcode);
         }
     }
 
     // find opcode where most and least sig digit matters
-    if (opcode_function != nullptr) {
+    if (opcode_function == nullptr) {
         switch (opcode & 0xF00F) {
             case 0x8000:
                 opcode_function = &Chip8::execOpcode0x8XY0;
@@ -95,6 +94,12 @@ void Chip8::emulateCycle() {
             case 0x8004:
                 opcode_function = &Chip8::execOpcode0x8XY4;
                 break;
+            case 0x8005:
+                opcode_function = &Chip8::execOpcode0x8XY5;
+                break;
+
+            default:
+                printf("Unknown opcode: 0x%X\n", opcode);
         }
     }
 
@@ -227,6 +232,17 @@ void Chip8::execOpcode0x8XY4() {
     // eval to 1 or 0 if there is a carry
     V[0xF] = ((V[X] + V[Y]) > 0xFF);
     V[X] += V[Y];
+    printf("testing 0x8XY4: Sum=0x%X, Carry=%d\n", V[X], V[0xF]);
+}
+
+void Chip8::execOpcode0x8XY5() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+
+    // eval to 1 or 0 if there is a borrow
+    V[0xF] = ((V[X] - V[Y]) < 0x0);
+    V[X] -= V[Y];
+    printf("testing 0x8XY5: Diff=0x%X, Borrow=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0xANNN() {
