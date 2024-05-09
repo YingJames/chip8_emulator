@@ -77,6 +77,8 @@ public:
 
     // store VY - VX to register VX with borrow value set to VF
     void execOpcode0x8XY7();
+
+    // store left shifted VY to register VX with msbit of VY set to VF
     void execOpcode0x8XYE();
     void execOpcode0x9XY0();
     void execOpcode0xANNN();

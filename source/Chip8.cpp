@@ -100,6 +100,12 @@ void Chip8::emulateCycle() {
             case 0x8006:
                 opcode_function = &Chip8::execOpcode0x8XY6;
                 break;
+            case 0x8007:
+                opcode_function = &Chip8::execOpcode0x8XY7;
+                break;
+            case 0x800E:
+                opcode_function = &Chip8::execOpcode0x8XYE;
+                break;
 
             default:
                 printf("Unknown opcode: 0x%X\n", opcode);
@@ -266,6 +272,16 @@ void Chip8::execOpcode0x8XY7() {
     V[0xF] = ((V[Y] - V[X]) < 0x0);
     V[X] = V[Y] - V[X];
     printf("testing 0x8XY7: VX (VY-VX)=0x%X, Borrow=%d\n", V[X], V[0xF]);
+}
+
+void Chip8::execOpcode0x8XYE() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+
+    // store most sig digit
+    V[0xF] = V[Y] & 0x80;
+    V[X] <<= V[Y];
+    printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0xANNN() {
