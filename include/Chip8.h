@@ -26,11 +26,23 @@ public:
     void emulateCycle();
 
     void execOpcode0x0NNN();
+
+    // Clear the screen
     void execOpcode0x00E0();
+
+    // Return from a subroutine
     void execOpcode0x00EE();
+
+    // Jump to address NNN
     void execOpcode0x1NNN();
+
+    // Execute subroutine at address NNN
     void execOpcode0x2NNN();
+
+    // skip the following (or next) instruction if the VX == NN
     void execOpcode0x3XNN();
+
+    // skip the following (or next) instruction if the VX != NN
     void execOpcode0x4XNN();
     void execOpcode0x5XY0();
     void execOpcode0x6XNN();

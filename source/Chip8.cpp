@@ -90,13 +90,11 @@ void Chip8::execOpcode0x0NNN() {
     printf("test 0x0NNN opcode\n");
 }
 
-// clear the screen
 void Chip8::execOpcode0x00E0() {
     printf("test 0x00E0 opcode\n");
     std::memset(gfx, 0, sizeof(gfx));
 }
 
-// return from subroutine
 void Chip8::execOpcode0x00EE() {
     printf("test 0x00EE opcode\n");
     pc = stack[sp];
@@ -109,7 +107,6 @@ void Chip8::execOpcode0x1NNN() {
     printf("jumping to address 0x%03x\n", pc);
 }
 
-// call a subroutine
 void Chip8::execOpcode0x2NNN() {
     ++sp;
     stack[sp] = pc;
@@ -118,7 +115,6 @@ void Chip8::execOpcode0x2NNN() {
     pc = address;
 }
 
-// skip the following instruction
 void Chip8::execOpcode0x3XNN() {
     const unsigned short NN = (opcode & 0x00FF);
     const unsigned short X = (opcode & 0x0F00) >> 8;
