@@ -53,6 +53,8 @@ public:
 
     // Add value of NN to VX register
     void execOpcode0x7XNN();
+
+    // Store the value of VY in VX register
     void execOpcode0x8XY0();
     void execOpcode0x8XY1();
     void execOpcode0x8XY2();

@@ -44,6 +44,7 @@ void Chip8::emulateCycle() {
             break;
     }
 
+    // for opcodes where most sig digit matters
     if (opcode_function == nullptr) {
         switch (opcode & 0xF000) {
             case 0x1000:
@@ -73,6 +74,15 @@ void Chip8::emulateCycle() {
 
             default:
                 printf("Unknown opcode: 0x%X\n", opcode);
+        }
+    }
+
+    // find opcode where most and least sig digit matters
+    if (opcode_function != nullptr) {
+        switch (opcode & 0xF00F) {
+            case 0x8000:
+                opcode_function = &Chip8::execOpcode0x8XY0;
+                break;
         }
     }
 
@@ -172,6 +182,12 @@ void Chip8::execOpcode0x7XNN() {
     const unsigned short X = (opcode & 0x0F00) >> 8;
     const unsigned short NN = (opcode & 0x00FF);
     V[X] += NN;
+}
+
+void Chip8::execOpcode0x8XY0() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    V[X] = V[Y];
 }
 
 void Chip8::execOpcode0xANNN() {
