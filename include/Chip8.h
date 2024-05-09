@@ -39,15 +39,19 @@ public:
     // Execute subroutine at address NNN
     void execOpcode0x2NNN();
 
-    // skip the following (or next) instruction if the VX == NN
+    // Skip the following (or next) instruction if the VX == NN
     void execOpcode0x3XNN();
 
-    // skip the following (or next) instruction if the VX != NN
+    // Skip the following (or next) instruction if the VX != NN
     void execOpcode0x4XNN();
 
-    // skip the following (or next) instruction if the VX == VY
+    // Skip the following (or next) instruction if the VX == VY
     void execOpcode0x5XY0();
+
+    // Store value of NN in register VX register
     void execOpcode0x6XNN();
+
+    // Add value of NN to VX register
     void execOpcode0x7XNN();
     void execOpcode0x8XY0();
     void execOpcode0x8XY1();
