@@ -21,11 +21,12 @@ void Chip8::emulateCycle()
     opcode = memory[pc] << 8 | memory[pc + 1];
 
     // decode opcode
-    unsigned short first_hex_digit = (opcode & 0xF000) >> 12;
-
-    if (first_hex_digit == 0xA)
+    switch (opcode & 0xF000)
     {
-        std::cout << "test A opcode" << std::endl;
+        case 0xA000:
+            std::cout << "test A opcode" << std::endl;
+            I = opcode & 0x0FFF;
+            break;
     }
     // execute opcode
 
