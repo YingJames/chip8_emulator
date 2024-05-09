@@ -56,8 +56,14 @@ public:
 
     // Store the value of VY in VX register
     void execOpcode0x8XY0();
+
+    // Set register VX to VX OR VY
     void execOpcode0x8XY1();
+
+    // Set register VX to VX AND VY
     void execOpcode0x8XY2();
+
+    // Set register VX to VX XOR VY
     void execOpcode0x8XY3();
     void execOpcode0x8XY4();
     void execOpcode0x8XY5();

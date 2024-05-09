@@ -83,6 +83,15 @@ void Chip8::emulateCycle() {
             case 0x8000:
                 opcode_function = &Chip8::execOpcode0x8XY0;
                 break;
+            case 0x8001:
+                opcode_function = &Chip8::execOpcode0x8XY1;
+                break;
+            case 0x8002:
+                opcode_function = &Chip8::execOpcode0x8XY2;
+                break;
+            case 0x8003:
+                opcode_function = &Chip8::execOpcode0x8XY3;
+                break;
         }
     }
 
@@ -188,6 +197,24 @@ void Chip8::execOpcode0x8XY0() {
     const unsigned short X = (opcode & 0x0F00) >> 8;
     const unsigned short Y = (opcode & 0x00F0) >> 4;
     V[X] = V[Y];
+}
+
+void Chip8::execOpcode0x8XY1() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    V[X] = V[X] | V[Y];
+}
+
+void Chip8::execOpcode0x8XY2() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    V[X] = V[X] & V[Y];
+}
+
+void Chip8::execOpcode0x8XY3() {
+    const unsigned short X = (opcode & 0x0F00) >> 8;
+    const unsigned short Y = (opcode & 0x00F0) >> 4;
+    V[X] = V[X] ^ V[Y];
 }
 
 void Chip8::execOpcode0xANNN() {
