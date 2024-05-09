@@ -9,11 +9,18 @@
 class Chip8
 {
 public:
-    unsigned short opcode;
     unsigned char memory[4096];
     unsigned char V[16];
+    unsigned short stack[16];
+    unsigned char gfx[64 * 32];
+    unsigned short opcode;
     unsigned short I;
     unsigned short pc;
+    unsigned short sp;
+
+
+    unsigned char delay_timer;
+    unsigned char sound_timer;
 
     void initialize();
     void emulateCycle();
