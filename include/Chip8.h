@@ -89,7 +89,10 @@ public:
 
     // Jump to address NNN + V0
     void execOpcode0xBNNN();
+
+    // Set VX to a random number with a mask of NN
     void execOpcode0xCXNN();
+
     void execOpcode0xDXYN();
     void execOpcode0xEX9E();
     void execOpcode0xEXA1();

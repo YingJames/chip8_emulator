@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
+#include <random>
 #include "Chip8.h"
 #include "fontset.h"
 
@@ -75,6 +77,9 @@ void Chip8::emulateCycle() {
                 break;
             case 0xB000:
                 opcode_function = &Chip8::execOpcode0xBNNN;
+                break;
+            case 0xC000:
+                opcode_function = &Chip8::execOpcode0xCXNN;
                 break;
         }
     }
@@ -308,4 +313,13 @@ void Chip8::execOpcode0xANNN() {
 void Chip8::execOpcode0xBNNN() {
     printf("test 0xBNNN opcode\n");
     pc = (opcode & 0XFFF) + V[0];
+}
+
+void Chip8::execOpcode0xCXNN() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t NN = (opcode & 0x00FF);
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<uint8_t> distribution(0x0, 0xFF);
+    V[X] = distribution(generator) & NN;
 }
