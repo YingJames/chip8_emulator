@@ -106,6 +106,8 @@ void Chip8::emulateCycle() {
             case 0x800E:
                 opcode_function = &Chip8::execOpcode0x8XYE;
                 break;
+            case 0x9000:
+                opcode_function = &Chip8::execOpcode0x9XY0;
 
             default:
                 printf("Unknown opcode: 0x%X\n", opcode);
@@ -195,7 +197,7 @@ void Chip8::execOpcode0x5XY0() {
         pc += 4;
     }
 
-    printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (VX != VY));
+    printf("checking if  VX (%X) == VY (%X) - Result: %d\n", X, Y, (VX != VY));
 }
 
 void Chip8::execOpcode0x6XNN() {
@@ -282,6 +284,17 @@ void Chip8::execOpcode0x8XYE() {
     V[0xF] = V[Y] & 0x80;
     V[X] <<= V[Y];
     printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
+}
+
+void Chip8::execOpcode0x9XY0() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+
+    if (V[X] != V[Y]) {
+        pc += 4;
+    }
+
+    printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (V[X] != V[Y]));
 }
 
 void Chip8::execOpcode0xANNN() {

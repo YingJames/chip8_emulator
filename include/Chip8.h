@@ -80,7 +80,11 @@ public:
 
     // store left shifted VY to register VX with msbit of VY set to VF
     void execOpcode0x8XYE();
+
+    // Skip the following (or next) instruction if the VX == VY
     void execOpcode0x9XY0();
+
+    // Store memory address NNN in register I
     void execOpcode0xANNN();
     void execOpcode0xBNNN();
     void execOpcode0xCXNN();
