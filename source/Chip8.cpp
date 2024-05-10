@@ -73,6 +73,9 @@ void Chip8::emulateCycle() {
             case 0xA000:
                 opcode_function = &Chip8::execOpcode0xANNN;
                 break;
+            case 0xB000:
+                opcode_function = &Chip8::execOpcode0xBNNN;
+                break;
         }
     }
 
@@ -300,4 +303,9 @@ void Chip8::execOpcode0x9XY0() {
 void Chip8::execOpcode0xANNN() {
     printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
+}
+
+void Chip8::execOpcode0xBNNN() {
+    printf("test 0xBNNN opcode\n");
+    pc = (opcode & 0XFFF) + V[0];
 }

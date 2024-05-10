@@ -86,6 +86,8 @@ public:
 
     // Store memory address NNN in register I
     void execOpcode0xANNN();
+
+    // Jump to address NNN + V0
     void execOpcode0xBNNN();
     void execOpcode0xCXNN();
     void execOpcode0xDXYN();
