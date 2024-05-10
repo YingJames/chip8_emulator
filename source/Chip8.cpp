@@ -38,7 +38,7 @@ void Chip8::emulateCycle() {
     opcode = memory[pc] << 8 | memory[pc + 1];
 
     // decode opcode
-    void (Chip8::*opcode_function) () = nullptr;
+    void (Chip8::*opcode_function)() = nullptr;
     switch (opcode) {
         case 0x00E0:
             opcode_function = &Chip8::execOpcode0x00E0;
@@ -125,7 +125,7 @@ void Chip8::emulateCycle() {
     // execute opcode
 //    pc += 2;
     if (opcode_function != nullptr) {
-        (this->*opcode_function) ();
+        (this->*opcode_function)();
     }
 
     // update timers
@@ -322,4 +322,31 @@ void Chip8::execOpcode0xCXNN() {
     std::mt19937 generator(rd());
     std::uniform_int_distribution<uint8_t> distribution(0x0, 0xFF);
     V[X] = distribution(generator) & NN;
+}
+
+void Chip8::execOpcode0xDXYN() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t Y = (opcode & 0x00F0) >> 4;
+    const uint8_t N = (opcode & 0x000F);
+
+    const uint8_t x_pos = V[X] % 64;
+    const uint8_t y_pos = V[Y] % 32;
+
+    for (int row = 0; row < N; row++) {
+        for (int col = 0; col < 8; col++) {
+            // clip sprite if it goes off-screen
+            if (x_pos + col >= 64 || y_pos + row >= 32) {
+                continue;
+            }
+            const uint8_t sprite_row = memory[(I + col) + (row * 8)];
+            const uint8_t sprite_bit_mask = 0x80 >> (7-col);
+
+            const uint8_t display_px_index = ((y_pos + row) * 64) + (x_pos + col);
+            const uint8_t current_sprite_px_value = sprite_row & sprite_bit_mask;
+            const uint8_t pixel_brightness = current_sprite_px_value ^ gfx[display_px_index];
+
+            gfx[display_px_index] = pixel_brightness;
+            V[0xF] = current_sprite_px_value && gfx[display_px_index];
+        }
+    }
 }

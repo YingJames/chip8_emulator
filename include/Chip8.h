@@ -94,6 +94,8 @@ public:
     void execOpcode0xCXNN();
 
     void execOpcode0xDXYN();
+
+    //
     void execOpcode0xEX9E();
     void execOpcode0xEXA1();
     void execOpcode0xFX07();
