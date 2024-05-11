@@ -81,6 +81,10 @@ void Chip8::emulateCycle() {
             case 0xC000:
                 opcode_function = &Chip8::execOpcode0xCXNN;
                 break;
+            case 0xD000:
+                opcode_function = &Chip8::execOpcode0xDXYN;
+                break;
+
         }
     }
 

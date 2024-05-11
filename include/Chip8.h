@@ -93,6 +93,7 @@ public:
     // Set VX to a random number with a mask of NN
     void execOpcode0xCXNN();
 
+    // Draw a sprite at VX, VY with N bytes and VF for collision
     void execOpcode0xDXYN();
 
     //
