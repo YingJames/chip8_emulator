@@ -1,0 +1,30 @@
+//
+// Created by james on 5/10/24.
+//
+
+#ifndef CHIP8_EMULATOR_PROJECT_KEYPAD_MAP_H
+#define CHIP8_EMULATOR_PROJECT_KEYPAD_MAP_H
+
+#include <cstdint>
+#include <SDL2/SDL_keyboard.h>
+
+constexpr SDL_Scancode keypad_map[16] = {
+    SDL_SCANCODE_X,
+    SDL_SCANCODE_1,
+    SDL_SCANCODE_2,
+    SDL_SCANCODE_3,
+    SDL_SCANCODE_Q,
+    SDL_SCANCODE_W,
+    SDL_SCANCODE_E,
+    SDL_SCANCODE_A,
+    SDL_SCANCODE_S,
+    SDL_SCANCODE_D,
+    SDL_SCANCODE_Z,
+    SDL_SCANCODE_C,
+    SDL_SCANCODE_4,
+    SDL_SCANCODE_R,
+    SDL_SCANCODE_F,
+    SDL_SCANCODE_V
+};
+
+#endif //CHIP8_EMULATOR_PROJECT_KEYPAD_MAP_H
