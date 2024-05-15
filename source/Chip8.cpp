@@ -8,6 +8,10 @@
 #include <random>
 #include "Chip8.h"
 #include "fontset.h"
+#include "keypad_map.h"
+#include <iostream>
+#include <fstream>
+#include <SDL2/SDL.h>
 
 void Chip8::initialize() {
     // initialize registers and memory once
@@ -28,8 +32,24 @@ void Chip8::initialize() {
     V[1] = 0x23;
 
     // load fontset
-    for (int i = 0; i < 80; i++) {
+    for (int i = 0; i < 0x50; i++) {
         memory[i] = fontset[i];
+    }
+}
+
+void Chip8::loadROM(std::string filename) {
+    // open in binary mode
+    std::ifstream file(filename, std::ios::binary);
+
+    if (file.fail()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        std::cerr << "Failure reason: " << (file.rdstate() & std::ifstream::failbit ? "Logical error" : "Other error") << std::endl;
+    }
+
+    // find size of file and then add the contents to memory at 0x200
+    std::vector<uint8_t> rom_buffer(std::istreambuf_iterator<char>(file), {});
+    for (int i = 0; i < rom_buffer.size(); ++i) {
+        memory[0x200 + i] = rom_buffer[i];
     }
 }
 
@@ -120,6 +140,10 @@ void Chip8::emulateCycle() {
                 break;
             case 0x9000:
                 opcode_function = &Chip8::execOpcode0x9XY0;
+                break;
+            case 0xE00E:
+                opcode_function = &Chip8::execOpcode0xEX9E;
+                break;
 
             default:
                 printf("Unknown opcode: 0x%X\n", opcode);
@@ -354,3 +378,18 @@ void Chip8::execOpcode0xDXYN() {
         }
     }
 }
+
+void Chip8::execOpcode0xEX9E() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t key = V[X];
+}
+/*
+
+int Chip8::isKeyPressed(uint8_t key) {
+    const uint8_t* keyboard_state = SDL_GetKeyboardState(nullptr);
+    SDL_Scancode scancode;
+    if (key) {
+        printf("%d", key);
+    }
+    return 1;
+}*/

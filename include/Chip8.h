@@ -24,6 +24,10 @@ public:
 
     void initialize();
     void emulateCycle();
+    void loadROM(std::string filename);
+
+    // return 1 if true, 0 if false
+    int isKeyPressed(uint8_t key);
 
     void execOpcode0x0NNN();
 
