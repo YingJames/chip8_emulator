@@ -144,6 +144,9 @@ void Chip8::emulateCycle() {
             case 0xE00E:
                 opcode_function = &Chip8::execOpcode0xEX9E;
                 break;
+            case 0xF00A:
+                opcode_function = &Chip8::execOpcode0xFX0A;
+                break;
 
             default:
                 printf("Unknown opcode: 0x%X\n", opcode);
@@ -405,13 +408,23 @@ void Chip8::execOpcode0xEX9E() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
 }
-/*
+
+void Chip8::execOpcode0xFX0A() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t key = V[X];
+    if (isKeyPressed(key)) {
+        printf("this works\n");
+        pc += 2;
+    }
+}
 
 int Chip8::isKeyPressed(uint8_t key) {
     const uint8_t* keyboard_state = SDL_GetKeyboardState(nullptr);
-    SDL_Scancode scancode;
-    if (key) {
-        printf("%d", key);
+    SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
+    scancode = key_to_scancode[key];
+
+    if (scancode != SDL_SCANCODE_UNKNOWN) {
+        return keyboard_state[scancode];
     }
     return 1;
 }*/
