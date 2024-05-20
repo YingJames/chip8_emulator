@@ -171,11 +171,13 @@ void Chip8::emulateCycle() {
 
 void Chip8::execOpcode0x0NNN() {
     printf("test 0x0NNN opcode\n");
+    pc += 2;
 }
 
 void Chip8::execOpcode0x00E0() {
     printf("test 0x00E0 opcode\n");
     std::memset(gfx, 0, sizeof(gfx));
+    pc += 2;
 }
 
 void Chip8::execOpcode0x00EE() {
@@ -204,10 +206,11 @@ void Chip8::execOpcode0x3XNN() {
     const uint8_t VX = V[X];
 
     if (VX == NN) {
-        pc += 4;
+        pc += 2;
     }
 
     printf("checking if  V%X == NN (%X) - Result: %d\n", X, NN, (VX == NN));
+    pc += 2;
 }
 
 void Chip8::execOpcode0x4XNN() {
@@ -216,10 +219,11 @@ void Chip8::execOpcode0x4XNN() {
     const uint8_t VX = V[X];
 
     if (VX != NN) {
-        pc += 4;
+        pc += 2;
     }
 
     printf("checking if  V%X != NN (%X) - Result: %d\n", X, NN, (VX != NN));
+    pc += 2;
 
 }
 
@@ -230,46 +234,53 @@ void Chip8::execOpcode0x5XY0() {
     const uint8_t VY = V[Y];
 
     if (VX == VY) {
-        pc += 4;
+        pc += 2;
     }
 
     printf("checking if  VX (%X) == VY (%X) - Result: %d\n", X, Y, (VX != VY));
+    pc += 2;
 }
 
 void Chip8::execOpcode0x6XNN() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t NN = (opcode & 0x00FF);
     V[X] = NN;
+    pc += 2;
 }
 
 void Chip8::execOpcode0x7XNN() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t NN = (opcode & 0x00FF);
     V[X] += NN;
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY0() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[Y];
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY1() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] | V[Y];
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY2() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] & V[Y];
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY3() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] ^ V[Y];
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY4() {
@@ -280,6 +291,7 @@ void Chip8::execOpcode0x8XY4() {
     V[0xF] = ((V[X] + V[Y]) > 0xFF);
     V[X] += V[Y];
     printf("testing 0x8XY4: Sum=0x%X, Carry=%d\n", V[X], V[0xF]);
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY5() {
@@ -290,6 +302,7 @@ void Chip8::execOpcode0x8XY5() {
     V[0xF] = ((V[X] - V[Y]) < 0x0);
     V[X] -= V[Y];
     printf("testing 0x8XY5: Diff=0x%X, Borrow=%d\n", V[X], V[0xF]);
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY6() {
@@ -300,6 +313,7 @@ void Chip8::execOpcode0x8XY6() {
     V[0xF] = V[Y] & 0x01;
     V[X] >>= V[Y];
     printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY7() {
@@ -310,6 +324,7 @@ void Chip8::execOpcode0x8XY7() {
     V[0xF] = ((V[Y] - V[X]) < 0x0);
     V[X] = V[Y] - V[X];
     printf("testing 0x8XY7: VX (VY-VX)=0x%X, Borrow=%d\n", V[X], V[0xF]);
+    pc += 2;
 }
 
 void Chip8::execOpcode0x8XYE() {
@@ -320,6 +335,7 @@ void Chip8::execOpcode0x8XYE() {
     V[0xF] = V[Y] & 0x80;
     V[X] <<= V[Y];
     printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
+    pc += 2;
 }
 
 void Chip8::execOpcode0x9XY0() {
@@ -327,20 +343,23 @@ void Chip8::execOpcode0x9XY0() {
     const uint8_t Y = (opcode & 0x00F0) >> 4;
 
     if (V[X] != V[Y]) {
-        pc += 4;
+        pc += 2;
     }
 
     printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (V[X] != V[Y]));
+    pc += 2;
 }
 
 void Chip8::execOpcode0xANNN() {
     printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
+    pc += 2;
 }
 
 void Chip8::execOpcode0xBNNN() {
     printf("test 0xBNNN opcode\n");
     pc = (opcode & 0XFFF) + V[0];
+    pc += 2;
 }
 
 void Chip8::execOpcode0xCXNN() {
@@ -350,6 +369,7 @@ void Chip8::execOpcode0xCXNN() {
     std::mt19937 generator(rd());
     std::uniform_int_distribution<uint8_t> distribution(0x0, 0xFF);
     V[X] = distribution(generator) & NN;
+    pc += 2;
 }
 
 void Chip8::execOpcode0xDXYN() {
@@ -377,6 +397,8 @@ void Chip8::execOpcode0xDXYN() {
             V[0xF] = current_sprite_px_value && gfx[display_px_index];
         }
     }
+
+    pc += 2;
 }
 
 void Chip8::execOpcode0xEX9E() {
