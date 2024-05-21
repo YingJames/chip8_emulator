@@ -155,8 +155,6 @@ void Chip8::emulateCycle() {
                 opcode_function = &Chip8::execOpcode0xFX0A;
                 break;
 
-            default:
-                printf("Unknown opcode: 0x%X\n", opcode);
         }
     }
 
@@ -449,8 +447,4 @@ bool Chip8::isKeyPressed(uint8_t key) {
         return true;
     }
     return false;
-}
-
-void Chip8::handleKeyDown(SDL_Scancode scancode) {
-    printf("%d\n", scancode);
 }

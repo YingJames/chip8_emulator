@@ -29,8 +29,6 @@ public:
     // return 1 if true, 0 if false
     bool isKeyPressed(uint8_t key);
 
-    void handleKeyDown(SDL_Scancode scancode);
-
     void execOpcode0x0NNN();
 
     // Clear the screen
