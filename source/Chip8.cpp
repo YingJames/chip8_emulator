@@ -435,7 +435,9 @@ bool Chip8::isKeyPressed(uint8_t key) {
     if (scancode != SDL_SCANCODE_UNKNOWN) {
         return true;
     }
-    return 1;
-}*/
     return false;
+}
+
+void Chip8::handleKeyDown(SDL_Scancode scancode) {
+    printf("%d\n", scancode);
 }

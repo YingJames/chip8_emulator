@@ -27,8 +27,9 @@ public:
     void loadROM(std::string filename);
 
     // return 1 if true, 0 if false
-    int isKeyPressed(uint8_t key);
     bool isKeyPressed(uint8_t key);
+
+    void handleKeyDown(SDL_Scancode scancode);
 
     void execOpcode0x0NNN();
 
