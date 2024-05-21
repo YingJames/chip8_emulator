@@ -151,6 +151,9 @@ void Chip8::emulateCycle() {
             case 0xE001:
                 opcode_function = &Chip8::execOpcode0xEXA1;
                 break;
+            case 0xF007:
+                opcode_function = &Chip8::execOpcode0xFX07;
+                break;
             case 0xF00A:
                 opcode_function = &Chip8::execOpcode0xFX0A;
                 break;
@@ -427,6 +430,11 @@ void Chip8::execOpcode0xEXA1() {
         pc += 2;
     }
     pc += 2;
+}
+
+void Chip8::execOpcode0xFX07() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    V[X] = delay_timer;
 }
 
 void Chip8::execOpcode0xFX0A() {
