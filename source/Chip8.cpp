@@ -43,7 +43,8 @@ void Chip8::loadROM(std::string filename) {
 
     if (file.fail()) {
         std::cerr << "Error opening file: " << filename << std::endl;
-        std::cerr << "Failure reason: " << (file.rdstate() & std::ifstream::failbit ? "Logical error" : "Other error") << std::endl;
+        std::cerr << "Failure reason: " << (file.rdstate() & std::ifstream::failbit ? "Logical error" : "Other error")
+                  << std::endl;
     }
 
     // find size of file and then add the contents to memory at 0x200
@@ -110,10 +111,8 @@ void Chip8::emulateCycle() {
                 break;
 
         }
-    }
 
-    // find opcode where most and least sig digit matters
-    if (opcode_function == nullptr) {
+        // find opcode where most and least sig digit matters
         switch (opcode & 0xF00F) {
             case 0x8000:
                 opcode_function = &Chip8::execOpcode0x8XY0;
@@ -145,10 +144,13 @@ void Chip8::emulateCycle() {
             case 0x9000:
                 opcode_function = &Chip8::execOpcode0x9XY0;
                 break;
-            case 0xE00E:
+
+        }
+        switch (opcode & 0xF0FF) {
+            case 0xE09E:
                 opcode_function = &Chip8::execOpcode0xEX9E;
                 break;
-            case 0xE001:
+            case 0xE0A1:
                 opcode_function = &Chip8::execOpcode0xEXA1;
                 break;
             case 0xF007:
@@ -157,7 +159,9 @@ void Chip8::emulateCycle() {
             case 0xF00A:
                 opcode_function = &Chip8::execOpcode0xFX0A;
                 break;
-
+            case 0xF015:
+                opcode_function = &Chip8::execOpcode0xFX15;
+                break;
         }
     }
 
@@ -398,7 +402,7 @@ void Chip8::execOpcode0xDXYN() {
                 continue;
             }
             const uint8_t sprite_row = memory[(I + col) + (row * 8)];
-            const uint8_t sprite_bit_mask = 0x80 >> (7-col);
+            const uint8_t sprite_bit_mask = 0x80 >> (7 - col);
 
             const uint8_t display_px_index = ((y_pos + row) * 64) + (x_pos + col);
             const uint8_t current_sprite_px_value = sprite_row & sprite_bit_mask;
@@ -446,8 +450,13 @@ void Chip8::execOpcode0xFX0A() {
     }
 }
 
+void Chip8::execOpcode0xFX15() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    delay_timer = V[X];
+}
+
 int Chip8::isKeyPressed(uint8_t key) {
-    const uint8_t* keyboard_state = SDL_GetKeyboardState(nullptr);
+    const uint8_t *keyboard_state = SDL_GetKeyboardState(nullptr);
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
     scancode = key_to_scancode[key];
 
