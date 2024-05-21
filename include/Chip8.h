@@ -28,6 +28,7 @@ public:
 
     // return 1 if true, 0 if false
     int isKeyPressed(uint8_t key);
+    bool isKeyPressed(uint8_t key);
 
     void execOpcode0x0NNN();
 
