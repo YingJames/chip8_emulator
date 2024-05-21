@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <SDL2/SDL_keyboard.h>
 
-constexpr SDL_Scancode keypad_map[16] = {
+constexpr SDL_Scancode key_to_scancode[16] = {
     SDL_SCANCODE_X,
     SDL_SCANCODE_1,
     SDL_SCANCODE_2,
