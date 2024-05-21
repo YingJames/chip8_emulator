@@ -39,6 +39,8 @@ int main() {
     while (!quit) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
+                SDL_DestroyWindow(window);
+                SDL_Quit();
                 quit = true;
             }
 //            else if (event.type == SDL_KEYDOWN) {
