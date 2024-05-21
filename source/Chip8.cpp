@@ -446,13 +446,13 @@ void Chip8::execOpcode0xFX0A() {
     }
 }
 
-bool Chip8::isKeyPressed(uint8_t key) {
+int Chip8::isKeyPressed(uint8_t key) {
     const uint8_t* keyboard_state = SDL_GetKeyboardState(nullptr);
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
     scancode = key_to_scancode[key];
 
     if (scancode != SDL_SCANCODE_UNKNOWN) {
-        return true;
+        return keyboard_state[scancode];
     }
-    return false;
+    return 0;
 }

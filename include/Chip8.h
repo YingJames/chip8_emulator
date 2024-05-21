@@ -27,7 +27,7 @@ public:
     void loadROM(std::string filename);
 
     // return 1 if true, 0 if false
-    bool isKeyPressed(uint8_t key);
+    int isKeyPressed(uint8_t key);
 
     void execOpcode0x0NNN();
 
