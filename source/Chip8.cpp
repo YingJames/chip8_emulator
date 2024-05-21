@@ -54,6 +54,10 @@ void Chip8::loadROM(std::string filename) {
 }
 
 void Chip8::emulateCycle() {
+
+    // update keyboard state
+    SDL_PumpEvents();
+
     // fetch opcode
     opcode = memory[pc] << 8 | memory[pc + 1];
 
