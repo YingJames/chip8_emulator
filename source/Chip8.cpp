@@ -148,6 +148,9 @@ void Chip8::emulateCycle() {
             case 0xE00E:
                 opcode_function = &Chip8::execOpcode0xEX9E;
                 break;
+            case 0xE001:
+                opcode_function = &Chip8::execOpcode0xEXA1;
+                break;
             case 0xF00A:
                 opcode_function = &Chip8::execOpcode0xFX0A;
                 break;
@@ -412,6 +415,16 @@ void Chip8::execOpcode0xEX9E() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
     if (isKeyPressed(key)) {
+        printf("huh\n");
+        pc += 2;
+    }
+    pc += 2;
+}
+
+void Chip8::execOpcode0xEXA1() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    const uint8_t key = V[X];
+    if (!isKeyPressed(key)) {
         printf("huh\n");
         pc += 2;
     }
