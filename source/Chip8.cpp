@@ -165,6 +165,9 @@ void Chip8::emulateCycle() {
             case 0xF015:
                 opcode_function = &Chip8::execOpcode0xFX15;
                 break;
+            case 0xF018:
+                opcode_function = &Chip8::execOpcode0xFX18;
+                break;
         }
     }
 
