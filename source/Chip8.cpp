@@ -19,6 +19,9 @@ void Chip8::initialize() {
     I = 0;
     pc = 0x200;
     sp = 0;
+    instruction_counter = 0;
+    target_frequency = 5000000.0;
+    delay_timer = 60;
 
     std::memset(memory, 0, sizeof(memory));
     std::memset(V, 0, sizeof(V));
@@ -165,6 +168,8 @@ void Chip8::emulateCycle() {
         }
     }
 
+    instruction_counter++;
+
     // execute opcode
 //    pc += 2;
     if (opcode_function != nullptr) {
@@ -172,8 +177,9 @@ void Chip8::emulateCycle() {
     }
 
     // update timers
-    if (delay_timer > 0) {
+    if (delay_timer > 0 && instruction_counter == 1000/60) {
         --delay_timer;
+        printf("delay\n");
     }
 
     if (sound_timer > 0) {
@@ -453,6 +459,11 @@ void Chip8::execOpcode0xFX0A() {
 void Chip8::execOpcode0xFX15() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     delay_timer = V[X];
+}
+
+void Chip8::execOpcode0xFX18() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    sound_timer = V[X];
 }
 
 int Chip8::isKeyPressed(uint8_t key) {

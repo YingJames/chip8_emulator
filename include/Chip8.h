@@ -21,6 +21,8 @@ public:
 
     uint8_t delay_timer;
     uint8_t sound_timer;
+    double target_frequency;
+    uint8_t instruction_counter;
 
     void initialize();
     void emulateCycle();

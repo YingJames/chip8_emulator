@@ -30,8 +30,7 @@ int main() {
     }
 
     Chip8.loadROM("../output.ch8");
-    const double target_frequency = 1000.0;
-    const std::chrono::duration<double, std::milli> target_delay(1000.0 / target_frequency);
+    const std::chrono::duration<double, std::milli> target_delay(1000.0 / Chip8.target_frequency);
     auto last_cycle_time = std::chrono::high_resolution_clock::now();
 
     SDL_Event event;
