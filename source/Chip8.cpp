@@ -168,6 +168,9 @@ void Chip8::emulateCycle() {
             case 0xF018:
                 opcode_function = &Chip8::execOpcode0xFX18;
                 break;
+            case 0xF033:
+                opcode_function = &Chip8::execOpcode0xFX33;
+                break;
         }
     }
 
@@ -467,6 +470,13 @@ void Chip8::execOpcode0xFX15() {
 void Chip8::execOpcode0xFX18() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     sound_timer = V[X];
+}
+
+void Chip8::execOpcode0xFX33() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    memory[I + 2] = V[X] % 10;
+    memory[I + 1] = V[X] % 100;
+    memory[I] = V[X] % 1000;
 }
 
 int Chip8::isKeyPressed(uint8_t key) {
