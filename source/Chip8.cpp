@@ -168,20 +168,20 @@ void Chip8::emulateCycle() {
             case 0xF018:
                 opcode_function = &Chip8::execOpcode0xFX18;
                 break;
-            case 0xF033:
-                opcode_function = &Chip8::execOpcode0xFX33;
-                break;
-            case 0xF055:
-                opcode_function = &Chip8::execOpcode0xFX33;
-                break;
-            case 0xF065:
-                opcode_function = &Chip8::execOpcode0xFX33;
-                break;
             case 0xF01E:
                 opcode_function = &Chip8::execOpcode0xFX1E;
                 break;
             case 0xF029:
                 opcode_function = &Chip8::execOpcode0xFX29;
+                break;
+            case 0xF033:
+                opcode_function = &Chip8::execOpcode0xFX33;
+                break;
+            case 0xF055:
+                opcode_function = &Chip8::execOpcode0xFX55;
+                break;
+            case 0xF065:
+                opcode_function = &Chip8::execOpcode0xFX65;
                 break;
         }
     }
