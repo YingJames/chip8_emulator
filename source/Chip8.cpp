@@ -177,6 +177,12 @@ void Chip8::emulateCycle() {
             case 0xF065:
                 opcode_function = &Chip8::execOpcode0xFX33;
                 break;
+            case 0xF01E:
+                opcode_function = &Chip8::execOpcode0xFX1E;
+                break;
+            case 0xF029:
+                opcode_function = &Chip8::execOpcode0xFX29;
+                break;
         }
     }
 
@@ -476,6 +482,16 @@ void Chip8::execOpcode0xFX15() {
 void Chip8::execOpcode0xFX18() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     sound_timer = V[X];
+}
+
+void Chip8::execOpcode0xFX1E() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    I = V[X];
+}
+
+void Chip8::execOpcode0xFX29() {
+    const uint8_t X = (opcode & 0x0F00) >> 8;
+    I = (0x50 + (5 * V[X]));
 }
 
 void Chip8::execOpcode0xFX33() {
