@@ -12,6 +12,7 @@ int main() {
 //    std::cout << "Hello, World!" << std::endl;
     Chip8.initialize();
 
+    Chip8.delay_timer = 5;
     // SDL INITIALIZATION
     SDL_Window *window = nullptr;
     if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) {
@@ -33,6 +34,7 @@ int main() {
     const std::chrono::duration<double, std::milli> target_delay(1000.0 / Chip8.target_frequency);
     auto last_cycle_time = std::chrono::high_resolution_clock::now();
 
+
     SDL_Event event;
     bool quit = false;
     while (!quit) {
@@ -48,7 +50,24 @@ int main() {
 
             Chip8.emulateCycle();
 
+            // update timers
             auto current_time = std::chrono::high_resolution_clock::now();
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_cycle_time).count() >= 1000 / 60) {
+                if (Chip8.delay_timer > 0) {
+                    --Chip8.delay_timer;
+                }
+
+                if (Chip8.sound_timer > 0) {
+                    if (Chip8.sound_timer == 1) {
+                        std::cout << "boop\n";
+                    }
+                    --Chip8.sound_timer;
+                }
+
+                last_cycle_time = current_time;
+            }
+
+
             auto elapsed_time = current_time - last_cycle_time;
             if (elapsed_time < target_delay) {
                 // sleep for the remaining time if cycle too fast

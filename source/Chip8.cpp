@@ -194,18 +194,7 @@ void Chip8::emulateCycle() {
         (this->*opcode_function)();
     }
 
-    // update timers
-    if (delay_timer > 0 && instruction_counter == 1000/60) {
-        --delay_timer;
-        printf("delay\n");
-    }
 
-    if (sound_timer > 0) {
-        if (sound_timer == 1) {
-            std::cout << "boop\n";
-        }
-        --sound_timer;
-    }
 }
 
 void Chip8::execOpcode0x0NNN() {
@@ -444,7 +433,7 @@ void Chip8::execOpcode0xEX9E() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
     if (isKeyPressed(key)) {
-        printf("huh\n");
+//        printf("huh\n");
         pc += 2;
     }
     pc += 2;
@@ -454,7 +443,7 @@ void Chip8::execOpcode0xEXA1() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
     if (!isKeyPressed(key)) {
-        printf("huh\n");
+        printf("key not pressed\n");
         pc += 2;
     }
     pc += 2;
