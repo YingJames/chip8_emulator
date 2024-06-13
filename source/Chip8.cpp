@@ -435,8 +435,9 @@ void Chip8::execOpcode0xEX9E() {
     if (isKeyPressed(key)) {
 //        printf("huh\n");
         pc += 2;
+    } else {
+        pc += 2;
     }
-    pc += 2;
 }
 
 void Chip8::execOpcode0xEXA1() {
@@ -446,7 +447,10 @@ void Chip8::execOpcode0xEXA1() {
         printf("key not pressed\n");
         pc += 2;
     }
-    pc += 2;
+    else {
+        printf("key pressed\n");
+        pc += 2;
+    }
 }
 
 void Chip8::execOpcode0xFX07() {
