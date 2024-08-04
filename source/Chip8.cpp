@@ -477,8 +477,8 @@ void Chip8::execOpcode0xFX29() {
 void Chip8::execOpcode0xFX33() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     memory[I + 2] = V[X] % 10;
-    memory[I + 1] = V[X] % 100;
-    memory[I] = V[X] % 1000;
+    memory[I + 1] = (V[X]/10) % 10;
+    memory[I] = V[X] / 100;
 }
 
 void Chip8::execOpcode0xFX55() {
