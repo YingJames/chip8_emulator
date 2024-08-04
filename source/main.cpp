@@ -6,6 +6,7 @@
 #include "Chip8.h"
 #define WIDTH 640
 #define HEIGHT 320
+#define ROM_PATH "../roms/2-ibm-logo.ch8"
 Chip8 Chip8;
 
 int main() {
@@ -40,7 +41,7 @@ int main() {
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, 64, 32);
 //    SDL_SetRenderTarget(renderer, texture);
 
-    Chip8.loadROM("../roms/2-ibm-logo.ch8");
+    Chip8.loadROM(ROM_PATH);
     const std::chrono::duration<double, std::milli> target_delay(1000.0 / Chip8.target_frequency);
     auto last_cycle_time = std::chrono::high_resolution_clock::now();
 
