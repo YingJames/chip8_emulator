@@ -466,7 +466,7 @@ void Chip8::execOpcode0xFX18() {
 
 void Chip8::execOpcode0xFX1E() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
-    I = V[X];
+    I += V[X];
 }
 
 void Chip8::execOpcode0xFX29() {
