@@ -356,7 +356,7 @@ void Chip8::execOpcode0x8XYE() {
 
     // store most sig digit
     V[0xF] = V[Y] & 0x80;
-    V[X] <<= V[Y];
+    V[X] = V[Y] << 1;
 //    printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
 }
 
