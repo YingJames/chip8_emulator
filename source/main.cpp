@@ -40,7 +40,7 @@ int main() {
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, 64, 32);
 //    SDL_SetRenderTarget(renderer, texture);
 
-    Chip8.loadROM("../output.ch8");
+    Chip8.loadROM("../roms/2-ibm-logo.ch8");
     const std::chrono::duration<double, std::milli> target_delay(1000.0 / Chip8.target_frequency);
     auto last_cycle_time = std::chrono::high_resolution_clock::now();
 
@@ -61,10 +61,12 @@ int main() {
             Chip8.emulateCycle();
 
             // DISPLAY
-            for (int i = 0; i < 64 * 32; ++i) {
-                uint8_t pixel = Chip8.gfx[i];
-                uint32_t color = (pixel == 0) ? 0x00000000 : 0xFFFFFFFF; // Black for 0, white for 1
-                rgbBuffer[i] = color;
+            for (int y = 0; y < 32; ++y) {
+                for (int x = 0; x < 64; ++x) {
+                    uint8_t pixel = Chip8.gfx[y][x];
+                    uint32_t color = (pixel == 0) ? 0x00000000 : 0xFFFFFFFF; // Black for 0, white for 1
+                    rgbBuffer[y * 64 + x] = color;
+                }
             }
             SDL_UpdateTexture(texture, nullptr, rgbBuffer, 64 * sizeof(uint32_t));
             SDL_RenderClear(renderer);

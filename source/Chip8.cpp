@@ -400,21 +400,27 @@ void Chip8::execOpcode0xDXYN() {
     const uint8_t x_pos = V[X] % 64;
     const uint8_t y_pos = V[Y] % 32;
 
+    V[0xF] = 0; // Reset the collision flag
+
     for (int row = 0; row < N; row++) {
+        const uint8_t sprite_row = memory[I + row];
         for (int col = 0; col < 8; col++) {
             // clip sprite if it goes off-screen
             if (x_pos + col >= 64 || y_pos + row >= 32) {
                 continue;
             }
-            const uint8_t sprite_row = memory[(I + col) + (row * 8)];
-            const uint8_t sprite_bit_mask = 0x80 >> (7 - col);
+            const uint8_t sprite_bit_mask = 0x80 >> col;
+            const uint8_t sprite_pixel = (sprite_row & sprite_bit_mask) >> (7 - col);
 
-            const uint8_t display_px_index = ((y_pos + row) * 64) + (x_pos + col);
-            const uint8_t current_sprite_px_value = sprite_row & sprite_bit_mask;
-            const uint8_t pixel_brightness = current_sprite_px_value ^ gfx[display_px_index];
+            const uint8_t display_y_index = y_pos + row;
+            const uint8_t display_x_index = x_pos + col;
 
-            gfx[display_px_index] = pixel_brightness;
-            V[0xF] = current_sprite_px_value && gfx[display_px_index];
+            if (sprite_pixel == 1) {
+                if (gfx[display_y_index][display_x_index] == 1) {
+                    V[0xF] = 1; // Collision detected
+                }
+                gfx[display_y_index][display_x_index] ^= 1;
+            }
         }
     }
 }
