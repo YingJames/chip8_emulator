@@ -337,8 +337,7 @@ void Chip8::execOpcode0x8XY6() {
 
     // store least sig digit
     V[0xF] = V[Y] & 0x01;
-    V[X] >>= V[Y];
-//    printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
+    V[X] = V[Y] >> 1;
 }
 
 void Chip8::execOpcode0x8XY7() {

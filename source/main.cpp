@@ -6,7 +6,7 @@
 #include "Chip8.h"
 #define WIDTH 640
 #define HEIGHT 320
-#define ROM_PATH "../roms/2-ibm-logo.ch8"
+#define ROM_PATH "../roms/3-corax+.ch8"
 Chip8 Chip8;
 
 int main() {
