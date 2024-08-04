@@ -4,17 +4,23 @@
 #include <thread>
 #include <SDL.h>
 #include "Chip8.h"
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 640
+#define HEIGHT 320
 Chip8 Chip8;
 
 int main() {
-//    std::cout << "Hello, World!" << std::endl;
+
     Chip8.initialize();
 
-    Chip8.delay_timer = 5;
     // SDL INITIALIZATION
-    SDL_Window *window = nullptr;
+    static SDL_Surface *src_buffer = nullptr;
+    static SDL_Surface *arg_buffer = nullptr;
+    static SDL_Texture *texture = nullptr;
+    static SDL_Renderer *renderer = nullptr;
+    static SDL_Window *window = nullptr;
+    SDL_Rect dstRect = {0,0,640,320};
+    uint32_t rgbBuffer[64 * 32] = {0};
+
     if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) {
         printf("Could not initialize SDL: %s.\n", SDL_GetError());
         exit(-1);
@@ -29,6 +35,10 @@ int main() {
         fprintf(stderr, "SDL window failed to initialise: %s\n", SDL_GetError());
         return 1;
     }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, 64, 32);
+//    SDL_SetRenderTarget(renderer, texture);
 
     Chip8.loadROM("../output.ch8");
     const std::chrono::duration<double, std::milli> target_delay(1000.0 / Chip8.target_frequency);
@@ -50,6 +60,17 @@ int main() {
 
             Chip8.emulateCycle();
 
+            // DISPLAY
+            for (int i = 0; i < 64 * 32; ++i) {
+                uint8_t pixel = Chip8.gfx[i];
+                uint32_t color = (pixel == 0) ? 0x00000000 : 0xFFFFFFFF; // Black for 0, white for 1
+                rgbBuffer[i] = color;
+            }
+            SDL_UpdateTexture(texture, nullptr, rgbBuffer, 64 * sizeof(uint32_t));
+            SDL_RenderClear(renderer);
+            SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+            SDL_RenderPresent(renderer);
+
             // update timers
             auto current_time = std::chrono::high_resolution_clock::now();
             if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_cycle_time).count() >= 1000 / 60) {
@@ -58,9 +79,6 @@ int main() {
                 }
 
                 if (Chip8.sound_timer > 0) {
-                    if (Chip8.sound_timer == 1) {
-                        std::cout << "boop\n";
-                    }
                     --Chip8.sound_timer;
                 }
 

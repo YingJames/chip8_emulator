@@ -40,6 +40,17 @@ void Chip8::initialize() {
     }
 }
 
+void Chip8::drawScreen(SDL_Surface *surface) {
+    SDL_LockSurface(surface);
+    uint32_t *pixels = (uint32_t *)surface -> pixels;
+
+    for (int i = 0; i < 64 * 32; i++) {
+        pixels[i] = gfx[i] == 0 ? 0 : 0xFFFFFFFF;
+    }
+
+    SDL_UnlockSurface(surface);
+}
+
 void Chip8::loadROM(std::string filename) {
     // open in binary mode
     std::ifstream file(filename, std::ios::binary);
@@ -189,9 +200,9 @@ void Chip8::emulateCycle() {
     instruction_counter++;
 
     // execute opcode
-//    pc += 2;
     if (opcode_function != nullptr) {
         (this->*opcode_function)();
+        pc += 2;
     }
 
 
@@ -199,25 +210,24 @@ void Chip8::emulateCycle() {
 
 void Chip8::execOpcode0x0NNN() {
     printf("test 0x0NNN opcode\n");
-    pc += 2;
+//    pc += 2;
 }
 
 void Chip8::execOpcode0x00E0() {
     printf("test 0x00E0 opcode\n");
     std::memset(gfx, 0, sizeof(gfx));
-    pc += 2;
+//    pc += 2;
 }
 
 void Chip8::execOpcode0x00EE() {
-    printf("test 0x00EE opcode\n");
+//    printf("test 0x00EE opcode\n");
     pc = stack[sp];
     --sp;
 }
 
 void Chip8::execOpcode0x1NNN() {
     pc = (opcode & 0x0FFF);
-    printf("test 0x1NNN opcode\n");
-    printf("jumping to address 0x%03x\n", pc);
+    pc -= 2;
 }
 
 void Chip8::execOpcode0x2NNN() {
@@ -226,6 +236,7 @@ void Chip8::execOpcode0x2NNN() {
 
     const uint16_t address = (opcode & 0x0FFF);
     pc = address;
+    pc -= 2;
 }
 
 void Chip8::execOpcode0x3XNN() {
@@ -237,8 +248,6 @@ void Chip8::execOpcode0x3XNN() {
         pc += 2;
     }
 
-    printf("checking if  V%X == NN (%X) - Result: %d\n", X, NN, (VX == NN));
-    pc += 2;
 }
 
 void Chip8::execOpcode0x4XNN() {
@@ -250,9 +259,7 @@ void Chip8::execOpcode0x4XNN() {
         pc += 2;
     }
 
-    printf("checking if  V%X != NN (%X) - Result: %d\n", X, NN, (VX != NN));
-    pc += 2;
-
+//    printf("checking if  V%X != NN (%X) - Result: %d\n", X, NN, (VX != NN));
 }
 
 void Chip8::execOpcode0x5XY0() {
@@ -265,50 +272,43 @@ void Chip8::execOpcode0x5XY0() {
         pc += 2;
     }
 
-    printf("checking if  VX (%X) == VY (%X) - Result: %d\n", X, Y, (VX != VY));
-    pc += 2;
+//    printf("checking if  VX (%X) == VY (%X) - Result: %d\n", X, Y, (VX != VY));
 }
 
 void Chip8::execOpcode0x6XNN() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t NN = (opcode & 0x00FF);
     V[X] = NN;
-    pc += 2;
 }
 
 void Chip8::execOpcode0x7XNN() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t NN = (opcode & 0x00FF);
     V[X] += NN;
-    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY0() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[Y];
-    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY1() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] | V[Y];
-    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY2() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] & V[Y];
-    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY3() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t Y = (opcode & 0x00F0) >> 4;
     V[X] = V[X] ^ V[Y];
-    pc += 2;
 }
 
 void Chip8::execOpcode0x8XY4() {
@@ -318,8 +318,7 @@ void Chip8::execOpcode0x8XY4() {
     // eval to 1 or 0 if there is a carry
     V[0xF] = ((V[X] + V[Y]) > 0xFF);
     V[X] += V[Y];
-    printf("testing 0x8XY4: Sum=0x%X, Carry=%d\n", V[X], V[0xF]);
-    pc += 2;
+//    printf("testing 0x8XY4: Sum=0x%X, Carry=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0x8XY5() {
@@ -329,8 +328,7 @@ void Chip8::execOpcode0x8XY5() {
     // eval to 1 or 0 if there is a borrow
     V[0xF] = ((V[X] - V[Y]) < 0x0);
     V[X] -= V[Y];
-    printf("testing 0x8XY5: Diff=0x%X, Borrow=%d\n", V[X], V[0xF]);
-    pc += 2;
+//    printf("testing 0x8XY5: Diff=0x%X, Borrow=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0x8XY6() {
@@ -340,8 +338,7 @@ void Chip8::execOpcode0x8XY6() {
     // store least sig digit
     V[0xF] = V[Y] & 0x01;
     V[X] >>= V[Y];
-    printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
-    pc += 2;
+//    printf("testing 0x8XY6: >>VY=0x%X, lsdigit=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0x8XY7() {
@@ -351,8 +348,7 @@ void Chip8::execOpcode0x8XY7() {
     // eval to 1 or 0 if there is a borrow
     V[0xF] = ((V[Y] - V[X]) < 0x0);
     V[X] = V[Y] - V[X];
-    printf("testing 0x8XY7: VX (VY-VX)=0x%X, Borrow=%d\n", V[X], V[0xF]);
-    pc += 2;
+//    printf("testing 0x8XY7: VX (VY-VX)=0x%X, Borrow=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0x8XYE() {
@@ -362,8 +358,7 @@ void Chip8::execOpcode0x8XYE() {
     // store most sig digit
     V[0xF] = V[Y] & 0x80;
     V[X] <<= V[Y];
-    printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
-    pc += 2;
+//    printf("testing 0x8XYE: >>VY=0x%X, msdigit=%d\n", V[X], V[0xF]);
 }
 
 void Chip8::execOpcode0x9XY0() {
@@ -374,20 +369,18 @@ void Chip8::execOpcode0x9XY0() {
         pc += 2;
     }
 
-    printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (V[X] != V[Y]));
-    pc += 2;
+//    printf("checking if  VX (%X) != VY (%X) - Result: %d\n", X, Y, (V[X] != V[Y]));
 }
 
 void Chip8::execOpcode0xANNN() {
-    printf("test 0xANNN opcode\n");
+//    printf("test 0xANNN opcode\n");
     I = opcode & 0x0FFF;
-    pc += 2;
 }
 
 void Chip8::execOpcode0xBNNN() {
-    printf("test 0xBNNN opcode\n");
+//    printf("test 0xBNNN opcode\n");
     pc = (opcode & 0XFFF) + V[0];
-    pc += 2;
+    pc -= 2;
 }
 
 void Chip8::execOpcode0xCXNN() {
@@ -397,7 +390,6 @@ void Chip8::execOpcode0xCXNN() {
     std::mt19937 generator(rd());
     std::uniform_int_distribution<uint8_t> distribution(0x0, 0xFF);
     V[X] = distribution(generator) & NN;
-    pc += 2;
 }
 
 void Chip8::execOpcode0xDXYN() {
@@ -425,17 +417,12 @@ void Chip8::execOpcode0xDXYN() {
             V[0xF] = current_sprite_px_value && gfx[display_px_index];
         }
     }
-
-    pc += 2;
 }
 
 void Chip8::execOpcode0xEX9E() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
     if (isKeyPressed(key)) {
-//        printf("huh\n");
-        pc += 2;
-    } else {
         pc += 2;
     }
 }
@@ -444,11 +431,6 @@ void Chip8::execOpcode0xEXA1() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
     if (!isKeyPressed(key)) {
-        printf("key not pressed\n");
-        pc += 2;
-    }
-    else {
-        printf("key pressed\n");
         pc += 2;
     }
 }
@@ -456,14 +438,14 @@ void Chip8::execOpcode0xEXA1() {
 void Chip8::execOpcode0xFX07() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     V[X] = delay_timer;
+    pc += 2;
 }
 
 void Chip8::execOpcode0xFX0A() {
     const uint8_t X = (opcode & 0x0F00) >> 8;
     const uint8_t key = V[X];
-    if (isKeyPressed(key)) {
-        printf("this works\n");
-        pc += 2;
+    if (!isKeyPressed(key)) {
+        pc -= 2;
     }
 }
 

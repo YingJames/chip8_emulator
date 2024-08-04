@@ -6,6 +6,8 @@
 #define CHIP8_EMULATOR_CHIP8_H
 
 
+#include <SDL_surface.h>
+
 class Chip8
 {
 public:
@@ -27,6 +29,8 @@ public:
     void initialize();
     void emulateCycle();
     void loadROM(std::string filename);
+
+    void drawScreen(SDL_Surface *surface);
 
     // return 1 if true, 0 if false
     int isKeyPressed(uint8_t key);
