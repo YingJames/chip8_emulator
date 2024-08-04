@@ -58,6 +58,7 @@ int main() {
 //            else if (event.type == SDL_KEYDOWN) {
 //                Chip8.handleKeyDown(event.key.keysym.scancode);
 //            }
+        }
 
             Chip8.emulateCycle();
 
@@ -69,6 +70,7 @@ int main() {
                     rgbBuffer[y * 64 + x] = color;
                 }
             }
+
             SDL_UpdateTexture(texture, nullptr, rgbBuffer, 64 * sizeof(uint32_t));
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
@@ -95,7 +97,12 @@ int main() {
                 std::this_thread::sleep_for(target_delay - elapsed_time);
             }
             last_cycle_time = std::chrono::high_resolution_clock::now();
-        }
     }
+
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
     return 0;
 }
